@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: elasticsearch
+  namespace: kube-logging
 spec:
   serviceName: "elasticsearch"
   replicas: 1
@@ -53,7 +54,8 @@ kind: Service
 metadata:
   name: elasticsearch
   labels:
-    service: elasticsearch
+    app: elasticsearch
+  namespace: kube-logging
 spec:
   ports:
   - port: 9200
@@ -62,3 +64,4 @@ spec:
     name: nodes
   selector:
     app: elasticsearch
+  clusterIP: None
