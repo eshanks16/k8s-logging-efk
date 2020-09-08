@@ -1,10 +1,17 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: elasticsearch
+  namespace: kube-logging
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: elasticsearch
   namespace: kube-logging
 spec:
-  serviceName: "elasticsearch"
+  serviceName: elasticsearch
   replicas: 1
   selector:
     matchLabels:
@@ -14,6 +21,7 @@ spec:
       labels:
         app: elasticsearch
     spec:
+      serviceAccountName: elasticsearch
       containers:
       - name: elasticsearch
         image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
@@ -44,7 +52,7 @@ spec:
         app: elasticsearch
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: vsphere-disk
+      storageClassName: hollow-storage-profile
       resources:
         requests:
           storage: 100Gi

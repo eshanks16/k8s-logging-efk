@@ -30,29 +30,9 @@ metadata:
     app: kibana
   namespace: kube-logging
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
   - port: 5601
     name: webinterface
   selector:
     app: kibana
----
-apiVersion: extensions/v1beta1
-kind: Ingress #ingress resource
-metadata:
-  name: kibana
-  annotations:
-    ingress.kubernetes.io/whitelist-source-range: 10.0.0.0/8 # change this range to admin IPs
-    ingress.kubernetes.io/rewrite-target: "/"
-  labels:
-    kibana: k8s
-  namespace: kube-logging
-spec:
-  rules:
-  - host: kibana.hollow.local #only match connections to prometheus.hollow.local. 
-    http:
-      paths:
-      - path: / #root path
-        backend:
-          serviceName: kibana
-          servicePort: 5601 
